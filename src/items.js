@@ -22,7 +22,7 @@ export default {
 			>
 				<MenuList>
 					{filterByName(data, value).map(item => (
-						<MenuItem key={item.name} onClick={() => addValue(item.name)}>
+						<MenuItem key={item.name} onClick={() => addValue(item.name, item.id)}>
 							<ListItemIcon>
 								<Avatar src={item.avatar} />
 							</ListItemIcon>
@@ -66,7 +66,7 @@ export default {
 			>
 				<MenuList>
 					{filterByName(data, value).map(item => (
-						<MenuItem key={item.name} onClick={() => addValue(item.name)}>
+						<MenuItem key={item.name} onClick={() => addValue(item.name, item.id)}>
 							<ListItemIcon>
 								<span style={{height: 16, width: 16, background: item.color}} />
 							</ListItemIcon>

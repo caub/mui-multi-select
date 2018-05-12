@@ -16,31 +16,22 @@ const styles = {
 // quick rndom char generator
 const randChar = (n = 97) => String.fromCharCode(n + Math.floor(5 * Math.random()));
 
-const indexData = data =>
-  Object.entries(data).reduce(
-    (acc, [k, arr]) => ({
-      ...acc,
-      [k]: Map(arr.map(o => [o.id, o])), // index by id
-      [`${k}ByName`]: Map(arr.map(o => [o.name, o.id])), // add name => id for name lookups
-    }),
-    {},
-  );
-
-const data = indexData({
-  assignee: [
+const data = {
+  assignee: Map([
     {id: 'a1', name: 'Jim', avatar: 'https://randomuser.me/api/portraits/men/69.jpg'},
     {id: 'a2', name: 'Jack', avatar: 'https://randomuser.me/api/portraits/women/25.jpg'},
     {id: 'a3', name: 'Jason', avatar: 'https://randomuser.me/api/portraits/men/30.jpg'},
-  ],
-  tag: [
+  ].map(o => [o.id, o])), // index by id
+  tag: Map([
     {id: 't1', name: 'Foo', color: orange[400]},
     {id: 't2', name: 'Bar', color: lime[300]},
     {id: 't3', name: 'Tup', color: purple[600]},
-  ]
-})
+  ].map(o => [o.id, o])), // index by id
+};
 
 const App = () => (
   <div style={styles}>
+    <h1><a href="https://github.com/caub/mui-multi-select" style={{textDecoration: 'none'}}>Mui-multi-select</a></h1>
     <MultiSelect
       inputProps={{placeholder: 'MultiSelect: pick your items!'}}
       items={Array.from({length: 9}, (_, i) =>

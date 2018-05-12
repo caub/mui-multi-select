@@ -42,6 +42,9 @@ const styles = {
 			background: 'rgba(200,200,200,.7)',
 		},
 	},
+	search: {
+		borderBottom: '2px solid rgba(200,200,200,.5)'
+	}
 };
 
 /**
@@ -54,7 +57,6 @@ const styles = {
 const filterKeys = (keys, input, selected) =>
 	keys.filter(key => key.toLowerCase().includes(input.toLowerCase()) && !selected.has(key));
 
-const parseSearch = search => typeof search === 'string' && [...new URLSearchParams(search)];
 
 class MultiSelectGroup extends React.Component {
 	// static propTypes = { // will use TS instead
@@ -65,7 +67,12 @@ class MultiSelectGroup extends React.Component {
 		inputValue: '',
 		inputKey: '',
 		inputColon: false, // boolean separator between key and value (':')
-		selectedItems: parseSearch(this.props.search) || [], // ArrayOf([key: String, value: String])
+		selectedItems: typeof this.props.search === 'string' ?
+			[...new URLSearchParams(this.props.search)].map(([k, v]) => {
+				const item = this.props.data[k] && this.props.data[k].find(o => o.name === v);
+				return [k, v, item ? item.id : undefined];
+			}) :
+			[], // ArrayOf([key: String, value: String, id?: String]) // optional id for an existing item in data (todo clean that)
 	};
 
 	componentDidMount() {
@@ -134,7 +141,7 @@ class MultiSelectGroup extends React.Component {
 		if (!li) return;
 		if (e.key === 'Delete' && li.dataset.key) {
 			const {selectedItems} = this.state;
-			const i = +li.dataset.key; // todo use id there
+			const i = +li.dataset.key;
 			this.setState({
 				selectedItems: [...selectedItems.slice(0, i), ...selectedItems.slice(i + 1)],
 			});
@@ -145,6 +152,7 @@ class MultiSelectGroup extends React.Component {
 		if (e.key === 'ArrowRight' && li.nextElementSibling) {
 			li.nextElementSibling.focus();
 		}
+		// todo handle keydown/up like gitlab issues
 	};
 
 	renderInput() {
@@ -159,12 +167,12 @@ class MultiSelectGroup extends React.Component {
 					style={{flex: 1}}
 					setInputEl={this.setInputEl}
 					setValue={v => this.update({inputValue: v})}
-					addValue={value =>
+					addValue={(name, id) =>
 						this.update({
 							inputColon: false,
 							inputKey: '',
 							inputValue: '',
-							selectedItems: [...selectedItems.slice(0, -1), [inputKey, value]],
+							selectedItems: [...selectedItems.slice(0, -1), [inputKey, name, id]],
 						})
 					}
 				/>
@@ -192,13 +200,12 @@ class MultiSelectGroup extends React.Component {
 				}
 			>
 				<MenuList>
-					<MenuItem onClick={console.log}>
+					<MenuItem className={this.props.classes.search} onClick={console.log}>
 						<ListItemIcon>
 							<Icon style={{marginRight: 0}}>search</Icon>
 						</ListItemIcon>
 						<ListItemText inset primary="Press enter or click to search" />
 					</MenuItem>
-					<Divider />
 					{filteredKeys.map(key => ({...ITEMS[key], key})).map(({key, label, icon}) => (
 						<MenuItem
 							key={key}
@@ -232,27 +239,26 @@ class MultiSelectGroup extends React.Component {
 					this.rootEl = el;
 				}}
 			>
-				{selectedItems.map(([key, value], i) => {
+				{selectedItems.map(([key, name, id], i) => {
 					const item = ITEMS[key];
-					// search avatar, color ... items's data in props.data, using value (the name)
 					if (!item) return null; // normally it never happens, if no typos
 
-					const names = this.props.data[`${key}ByName`];
-					const {avatar, color} = names && this.props.data[key].get(names.get(value)) || {};
+					const {avatar, color} = id && this.props.data[key].get(id) || {};
 					return (
 						item && (
-							<li key={i} role="button" tabIndex={0} data-key={i} className={classes.item}>
+							<li key={i} role="button" tabIndex={0} data-key={i} className={classes.item} onClick={e => e.currentTarget.focus()}>
 								<Chip label={item.label} />
-								{value && (
+								{name && (
 									<Chip
 										avatar={avatar && <Avatar src={avatar} />}
-										label={value}
+										label={name}
 										style={color && {background: color, color: theme.palette.getContrastText(color)}}
 										onDelete={() =>
 											this.update({
 												selectedItems: [...selectedItems.slice(0, i), ...selectedItems.slice(i + 1)],
 											})
 										}
+										onClick={() => console.log('todo edit')}
 									/>
 								)}
 							</li>
