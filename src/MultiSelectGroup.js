@@ -6,9 +6,8 @@ import Divider from 'material-ui/Divider';
 import {ListItemIcon, ListItemText} from 'material-ui/List';
 import {MenuItem} from 'material-ui/Menu';
 import Icon from 'material-ui/Icon';
-import IconButton from 'material-ui/IconButton';
 import Dropdown from './Dropdown';
-import {Input, MenuList} from './utils';
+import {Input, MenuList, IconButton} from './utils';
 import ITEMS from './items';
 
 const styles = {
@@ -269,12 +268,11 @@ class MultiSelectGroup extends React.Component {
 				{selectedItems.length || inputValue ? (
 					<li>
 						<IconButton
-							style={{height: 32}}
 							onClick={e =>
 								this.update({inputValue: '', inputKey: '', inputColon: false, selectedItems: []})
 							}
 						>
-							<Icon>clear</Icon>
+							clear
 						</IconButton>
 					</li>
 				) : null}

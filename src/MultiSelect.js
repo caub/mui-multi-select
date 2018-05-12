@@ -4,10 +4,8 @@ import {withStyles} from 'material-ui/styles';
 import Button from 'material-ui/Button';
 import Chip from 'material-ui/Chip';
 import {MenuItem, MenuList} from 'material-ui/Menu';
-import Icon from 'material-ui/Icon';
-import IconButton from 'material-ui/IconButton';
 import Dropdown from './Dropdown';
-import {Input} from './utils';
+import {Input, IconButton} from './utils';
 
 const styles = {
 	root: {
@@ -156,10 +154,9 @@ class MultiSelect extends React.Component {
 				{selectedItems.size || inputValue ? (
 					<li>
 						<IconButton
-							style={{height: '1.4em'}}
 							onClick={e => this.update({inputValue: '', selectedItems: Set()})}
 						>
-							<Icon>clear</Icon>
+							clear
 						</IconButton>
 					</li>
 				) : null}
