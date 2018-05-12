@@ -195,7 +195,7 @@ class MultiSelectGroup extends React.Component {
 						value={inputKey}
 						inputRef={this.setInputEl}
 						onChange={e => this.update({inputKey: e.target.value})}
-						inputProps={this.props.inputProps}
+						inputProps={{...this.props.inputProps, ...selectedItems.length ? {placeholder: undefined} : undefined}}
 					/>
 				}
 			>

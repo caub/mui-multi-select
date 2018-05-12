@@ -99,7 +99,7 @@ class MultiSelect extends React.Component {
 	}
 
 	render() {
-		const {classes, items, inputProps, ...rest} = this.props;
+		const {classes, items, inputProps: {placeholder, ...inputProps}, ...rest} = this.props;
 		const {inputValue = '', selectedItems} = this.state;
 		const filteredItems = filterItems(items, inputValue, selectedItems);
 		return (
@@ -130,6 +130,7 @@ class MultiSelect extends React.Component {
 						<Input
 							value={inputValue}
 							fullWidth
+							placeholder={selectedItems.size ? undefined : placeholder}
 							{...inputProps}
 							inputRef={el => {
 								this.inputEl = el;
