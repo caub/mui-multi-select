@@ -2,4 +2,4 @@
 
 examples in [src/index](src/index.js)
 
-Inspired from Gitlab issues filter component
+Inspired from Gitlab issues filter component and [mui-downshift](https://github.com/techniq/mui-downshift)
