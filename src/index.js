@@ -1,7 +1,6 @@
 import React from 'react';
-import {render} from 'react-dom';
-import {Map} from 'immutable';
-import {orange, lime, purple} from 'material-ui/colors';
+import { render } from 'react-dom';
+import { orange, lime, purple } from '@material-ui/core/colors';
 import MultiSelect from './MultiSelect';
 import MultiSelectGroup from './MultiSelectGroup';
 
@@ -17,35 +16,35 @@ const styles = {
 const randChar = (n = 97) => String.fromCharCode(n + Math.floor(5 * Math.random()));
 
 const data = {
-  assignee: Map([
-    {id: 'a1', name: 'Jim', avatar: 'https://randomuser.me/api/portraits/men/69.jpg'},
-    {id: 'a2', name: 'Jack', avatar: 'https://randomuser.me/api/portraits/women/25.jpg'},
-    {id: 'a3', name: 'Jason', avatar: 'https://randomuser.me/api/portraits/men/30.jpg'},
+  assignee: new Map([
+    { id: 'a1', name: 'Jim', avatar: 'https://randomuser.me/api/portraits/men/69.jpg' },
+    { id: 'a2', name: 'Jack', avatar: 'https://randomuser.me/api/portraits/women/25.jpg' },
+    { id: 'a3', name: 'Jason', avatar: 'https://randomuser.me/api/portraits/men/30.jpg' },
   ].map(o => [o.id, o])), // index by id
-  tag: Map([
-    {id: 't1', name: 'Foo', color: orange[400]},
-    {id: 't2', name: 'Bar', color: lime[300]},
-    {id: 't3', name: 'Tup', color: purple[600]},
+  tag: new Map([
+    { id: 't1', name: 'Foo', color: orange[400] },
+    { id: 't2', name: 'Bar', color: lime[300] },
+    { id: 't3', name: 'Tup', color: purple[600] },
   ].map(o => [o.id, o])), // index by id
 };
 
 const App = () => (
   <div style={styles}>
-    <h1><a href="https://github.com/caub/mui-multi-select" style={{textDecoration: 'none'}}>Mui-multi-select</a></h1>
+    <h1><a href="https://github.com/caub/mui-multi-select" style={{ textDecoration: 'none' }}>Mui-multi-select</a></h1>
     <MultiSelect
-      inputProps={{placeholder: 'MultiSelect: pick your items!'}}
-      items={Array.from({length: 9}, (_, i) =>
+      inputProps={{ placeholder: 'MultiSelect: pick your items!' }}
+      items={Array.from({ length: 9 }, (_, i) =>
         `${randChar(65)}${randChar()}${randChar()} ${i}`
       )} />
     <MultiSelectGroup
       data={data}
-      inputProps={{placeholder: 'MultiSelectGroup: pick your pairs of key-value!'}}
+      inputProps={{ placeholder: 'MultiSelectGroup: pick your pairs of key-value!' }}
     />
     <MultiSelectGroup
       data={data}
       search="tag=Foo&assignee=Jason"
     />
-    <h2 style={{marginTop: '2em'}}>Start editing to see some magic happen {'\u2728'}</h2>
+    <h2 style={{ marginTop: '2em' }}>Start editing to see some magic happen {'\u2728'}</h2>
   </div>
 );
 

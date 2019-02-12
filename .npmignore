@@ -1,4 +1,6 @@
 node_modules
 demo
+index.html
 webpack.config.js
-.babelrc
+.*
+package-lock.json
