@@ -1,18 +1,16 @@
 import React from 'react';
-import Avatar from 'material-ui/Avatar';
-import {ListItemIcon, ListItemText} from 'material-ui/List';
-import {MenuItem} from 'material-ui/Menu';
+import { Avatar, MenuItem, ListItemIcon, ListItemText } from '@material-ui/core';
 import Dropdown from './Dropdown';
-import {Input, MenuList} from './utils';
+import { Input, MenuList } from './utils';
 
 const filterByName = (items, input) =>
-	items.filter(({name}) => name.toLowerCase().includes(input.toLowerCase()));
+	items.filter(({ name }) => name.toLowerCase().includes(input.toLowerCase()));
 
 export default {
 	assignee: {
 		label: 'Assignee',
 		icon: 'person',
-		menu: ({value, setInputEl, setValue, addValue, data, ...props}) => (
+		menu: ({ value, setInputEl, setValue, addValue, data, ...props }) => (
 			<Dropdown
 				component="li"
 				input={
@@ -36,7 +34,7 @@ export default {
 	isClosed: {
 		label: 'Issue Closed',
 		icon: 'speaker_notes_off',
-		menu: ({value, setInputEl, setValue, addValue, ...props}) => (
+		menu: ({ value, setInputEl, setValue, addValue, ...props }) => (
 			<Dropdown
 				component="li"
 				input={
@@ -45,7 +43,7 @@ export default {
 				{...props}
 			>
 				<MenuList>
-					{filterByName([{name: 'Yes'}, {name: 'No'}], value).map(({name}) => (
+					{filterByName([{ name: 'Yes' }, { name: 'No' }], value).map(({ name }) => (
 						<MenuItem key={name} onClick={() => addValue(name)}>{name}</MenuItem>
 					))}
 				</MenuList>
@@ -56,7 +54,7 @@ export default {
 		label: 'Tag',
 		icon: 'label',
 		multi: true,
-		menu: ({value, setInputEl, setValue, addValue, data, ...props}) => (
+		menu: ({ value, setInputEl, setValue, addValue, data, ...props }) => (
 			<Dropdown
 				component="li"
 				input={
@@ -68,7 +66,7 @@ export default {
 					{filterByName(data, value).map(item => (
 						<MenuItem key={item.name} onClick={() => addValue(item.name, item.id)}>
 							<ListItemIcon>
-								<span style={{height: 16, width: 16, background: item.color}} />
+								<span style={{ height: 16, width: 16, background: item.color }} />
 							</ListItemIcon>
 							<ListItemText primary={item.name} />
 						</MenuItem>

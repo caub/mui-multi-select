@@ -1,10 +1,6 @@
 import React from 'react';
-import cn from 'classnames';
-import {Manager, Target, Popper} from 'react-popper';
-import {withStyles} from 'material-ui/styles';
-import Grow from 'material-ui/transitions/Grow';
-import Paper from 'material-ui/Paper';
-import ClickAwayListener from 'material-ui/utils/ClickAwayListener';
+import { Manager, Target, Popper } from 'react-popper';
+import { ClickAwayListener, Paper, Grow, withStyles } from '@material-ui/core';
 
 const styles = {
 	paper: {
@@ -38,12 +34,12 @@ class Dropdown extends React.PureComponent {
 		if (this.inputEl && this.inputEl.contains(e.target)) {
 			return; // ignore button interactions
 		}
-		this.setState({open: false});
+		this.setState({ open: false });
 	};
 
 	// only for non-controlled (=non-props-open) dropdowns
-	toggle = () => this.setState({open: !this.state.open});
-	open = () => this.setState({open: true});
+	toggle = () => this.setState({ open: !this.state.open });
+	open = () => this.setState({ open: true });
 
 	render() {
 		const {
@@ -64,7 +60,7 @@ class Dropdown extends React.PureComponent {
 					button.props[refProp](el);
 				}
 			},
-			...(!this.isControlled() && {onClick: this.open, onFocus: this.open}),
+			...(!this.isControlled() && { onClick: this.open, onFocus: this.open }),
 		});
 		return (
 			<Component {...props}>
@@ -73,12 +69,12 @@ class Dropdown extends React.PureComponent {
 					<Popper
 						placement="bottom-start"
 						eventsEnabled={open}
-						className={cn(classes.popper, {[classes.popperClose]: !open})}
+						className={`${classes.popper} ${!open ? classes.popperClose : ''}`}
 					>
 						<ClickAwayListener onClickAway={this.close}>
-							<Grow in={open} style={{transformOrigin: '0 0 0'}}>
+							<Grow in={open} style={{ transformOrigin: '0 0 0' }}>
 								<Paper className={classes.paper}>
-									{typeof children === 'function' ? children({onClose: this.close}) : children}
+									{typeof children === 'function' ? children({ onClose: this.close }) : children}
 								</Paper>
 							</Grow>
 						</ClickAwayListener>

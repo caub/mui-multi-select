@@ -1,13 +1,7 @@
 import React from 'react';
-import {withStyles} from 'material-ui/styles';
-import Chip from 'material-ui/Chip';
-import Avatar from 'material-ui/Avatar';
-import Divider from 'material-ui/Divider';
-import {ListItemIcon, ListItemText} from 'material-ui/List';
-import {MenuItem} from 'material-ui/Menu';
-import Icon from 'material-ui/Icon';
+import { Chip, Avatar, ListItemIcon, ListItemText, MenuItem, Icon, withStyles } from '@material-ui/core';
 import Dropdown from './Dropdown';
-import {Input, MenuList, IconButton} from './utils';
+import { Input, MenuList, IconButton } from './utils';
 import ITEMS from './items';
 
 const styles = {
@@ -106,7 +100,7 @@ class MultiSelectGroup extends React.Component {
 		// todo: if we press : or tab during fieldSelection, move to value, same for value -> fields
 		if (e.key === 'Backspace') {
 			// pop latest select item
-			const {selectedItems, inputColon, inputKey, inputValue} = this.state;
+			const { selectedItems, inputColon, inputKey, inputValue } = this.state;
 			if ((!inputColon && inputKey) || (inputColon && inputValue)) return;
 
 			const lastItem = selectedItems[selectedItems.length - 1];
@@ -139,7 +133,7 @@ class MultiSelectGroup extends React.Component {
 			document.activeElement.tagName === 'li' ? document.activeElement : document.activeElement.closest('li');
 		if (!li) return;
 		if (e.key === 'Delete' && li.dataset.key) {
-			const {selectedItems} = this.state;
+			const { selectedItems } = this.state;
 			const i = +li.dataset.key;
 			this.setState({
 				selectedItems: [...selectedItems.slice(0, i), ...selectedItems.slice(i + 1)],
@@ -155,17 +149,17 @@ class MultiSelectGroup extends React.Component {
 	};
 
 	renderInput() {
-		const {inputValue, inputColon, inputKey, selectedItems} = this.state;
+		const { inputValue, inputColon, inputKey, selectedItems } = this.state;
 
 		if (inputColon && ITEMS[inputKey] !== undefined) {
-			const {menu: MenuComp} = ITEMS[inputKey];
+			const { menu: MenuComp } = ITEMS[inputKey];
 			return (
 				<MenuComp
 					data={this.props.data[inputKey] && this.props.data[inputKey].valueSeq()}
 					value={inputValue}
-					style={{flex: 1}}
+					style={{ flex: 1 }}
 					setInputEl={this.setInputEl}
-					setValue={v => this.update({inputValue: v})}
+					setValue={v => this.update({ inputValue: v })}
 					addValue={(name, id) =>
 						this.update({
 							inputColon: false,
@@ -187,36 +181,36 @@ class MultiSelectGroup extends React.Component {
 		return (
 			<Dropdown
 				component="li"
-				style={{flex: 1}}
+				style={{ flex: 1 }}
 				input={
 					<Input
 						key="input"
 						value={inputKey}
 						inputRef={this.setInputEl}
-						onChange={e => this.update({inputKey: e.target.value})}
-						inputProps={{...this.props.inputProps, ...selectedItems.length ? {placeholder: undefined} : undefined}}
+						onChange={e => this.update({ inputKey: e.target.value })}
+						inputProps={{ ...this.props.inputProps, ...selectedItems.length ? { placeholder: undefined } : undefined }}
 					/>
 				}
 			>
 				<MenuList>
 					<MenuItem className={this.props.classes.search} onClick={console.log}>
 						<ListItemIcon>
-							<Icon style={{marginRight: 0}}>search</Icon>
+							<Icon style={{ marginRight: 0 }}>search</Icon>
 						</ListItemIcon>
 						<ListItemText inset primary="Press enter or click to search" />
 					</MenuItem>
-					{filteredKeys.map(key => ({...ITEMS[key], key})).map(({key, label, icon}) => (
+					{filteredKeys.map(key => ({ ...ITEMS[key], key })).map(({ key, label, icon }) => (
 						<MenuItem
 							key={key}
 							onClick={() =>
 								this.update(
-									{inputKey: key, inputColon: true, selectedItems: [...selectedItems, [key]]},
+									{ inputKey: key, inputColon: true, selectedItems: [...selectedItems, [key]] },
 									true,
 								)
 							}
 						>
 							<ListItemIcon>
-								<Icon style={{marginRight: 0}}>{icon}</Icon>
+								<Icon style={{ marginRight: 0 }}>{icon}</Icon>
 							</ListItemIcon>
 							<ListItemText inset primary={label} />
 						</MenuItem>
@@ -227,8 +221,8 @@ class MultiSelectGroup extends React.Component {
 	}
 
 	render() {
-		const {classes, theme, inputProps, ...rest} = this.props;
-		const {inputValue = '', selectedItems} = this.state;
+		const { classes, theme, inputProps, ...rest } = this.props;
+		const { inputValue = '', selectedItems } = this.state;
 
 		return (
 			<ul
@@ -242,7 +236,7 @@ class MultiSelectGroup extends React.Component {
 					const item = ITEMS[key];
 					if (!item) return null; // normally it never happens, if no typos
 
-					const {avatar, color} = id && this.props.data[key].get(id) || {};
+					const { avatar, color } = id && this.props.data[key].get(id) || {};
 					return (
 						item && (
 							<li key={i} role="button" tabIndex={0} data-key={i} className={classes.item} onClick={e => e.currentTarget.focus()}>
@@ -251,7 +245,7 @@ class MultiSelectGroup extends React.Component {
 									<Chip
 										avatar={avatar && <Avatar src={avatar} />}
 										label={name}
-										style={color && {background: color, color: theme.palette.getContrastText(color)}}
+										style={color && { background: color, color: theme.palette.getContrastText(color) }}
 										onDelete={() =>
 											this.update({
 												selectedItems: [...selectedItems.slice(0, i), ...selectedItems.slice(i + 1)],
@@ -269,7 +263,7 @@ class MultiSelectGroup extends React.Component {
 					<li>
 						<IconButton
 							onClick={e =>
-								this.update({inputValue: '', inputKey: '', inputColon: false, selectedItems: []})
+								this.update({ inputValue: '', inputKey: '', inputColon: false, selectedItems: [] })
 							}
 						>
 							clear
@@ -281,4 +275,4 @@ class MultiSelectGroup extends React.Component {
 	}
 }
 
-export default withStyles(styles, {withTheme: true})(MultiSelectGroup);
+export default withStyles(styles, { withTheme: true })(MultiSelectGroup);

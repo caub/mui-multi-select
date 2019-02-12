@@ -1,11 +1,8 @@
 import React from 'react';
-import {Set} from 'immutable';
-import {withStyles} from 'material-ui/styles';
-import Button from 'material-ui/Button';
-import Chip from 'material-ui/Chip';
-import {MenuItem, MenuList} from 'material-ui/Menu';
+import { Set } from 'immutable';
+import { Button, Chip, MenuItem, MenuList, withStyles } from '@material-ui/core';
 import Dropdown from './Dropdown';
-import {Input, IconButton} from './utils';
+import { Input, IconButton } from './utils';
 
 const styles = {
 	root: {
@@ -58,7 +55,7 @@ class MultiSelect extends React.Component {
 
 		if (!this.state.inputValue && this.state.selectedItems.size && e.key === 'Backspace') {
 			// pop latest select item
-			const {selectedItems} = this.state;
+			const { selectedItems } = this.state;
 			this.setState({
 				selectedItems: selectedItems.delete(
 					selectedItems
@@ -72,7 +69,7 @@ class MultiSelect extends React.Component {
 			document.activeElement.tagName === 'li' ? document.activeElement : document.activeElement.closest('li');
 		if (!li) return;
 		if (e.key === 'Delete' && li.dataset.key) {
-			const {selectedItems} = this.state;
+			const { selectedItems } = this.state;
 			this.setState({
 				selectedItems: selectedItems.delete(li.dataset.key),
 			});
@@ -97,8 +94,8 @@ class MultiSelect extends React.Component {
 	}
 
 	render() {
-		const {classes, items, inputProps: {placeholder, ...inputProps}, ...rest} = this.props;
-		const {inputValue = '', selectedItems} = this.state;
+		const { classes, items, inputProps: { placeholder, ...inputProps }, ...rest } = this.props;
+		const { inputValue = '', selectedItems } = this.state;
 		const filteredItems = filterItems(items, inputValue, selectedItems);
 		return (
 			<ul
@@ -116,14 +113,14 @@ class MultiSelect extends React.Component {
 						data-key={text}
 						label={text}
 						key={text}
-						onDelete={() => this.update({inputValue: '', selectedItems: selectedItems.delete(text)})}
-						style={{marginRight: 4, height: 25, borderRadius: 2}}
+						onDelete={() => this.update({ inputValue: '', selectedItems: selectedItems.delete(text) })}
+						style={{ marginRight: 4, height: 25, borderRadius: 2 }}
 					/>
 				))}
 
 				<Dropdown
 					component="li"
-					style={{flex: 1}}
+					style={{ flex: 1 }}
 					input={
 						<Input
 							value={inputValue}
@@ -134,7 +131,7 @@ class MultiSelect extends React.Component {
 								this.inputEl = el;
 							}}
 							disableUnderline
-							onChange={e => this.update({inputValue: e.target.value})}
+							onChange={e => this.update({ inputValue: e.target.value })}
 						/>
 					}
 				>
@@ -144,7 +141,7 @@ class MultiSelect extends React.Component {
 								key={name}
 								component={Button}
 								disableGutters
-								onClick={() => this.update({inputValue: '', selectedItems: selectedItems.add(name)})}
+								onClick={() => this.update({ inputValue: '', selectedItems: selectedItems.add(name) })}
 							>
 								{name}
 							</MenuItem>
@@ -154,7 +151,7 @@ class MultiSelect extends React.Component {
 				{selectedItems.size || inputValue ? (
 					<li>
 						<IconButton
-							onClick={e => this.update({inputValue: '', selectedItems: Set()})}
+							onClick={e => this.update({ inputValue: '', selectedItems: Set() })}
 						>
 							clear
 						</IconButton>
