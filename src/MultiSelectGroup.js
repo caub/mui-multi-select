@@ -51,7 +51,7 @@ const filterKeys = (keys, input, selected) =>
 	keys.filter(key => key.toLowerCase().includes(input.toLowerCase()) && !selected.has(key));
 
 
-class MultiSelectGroup extends React.Component {
+class MultiSelectGroup extends React.PureComponent {
 	// static propTypes = { // will use TS instead
 	// 	data: PropTypes.object.isRequired,
 	// 	search: PropTypes.string,
@@ -62,8 +62,8 @@ class MultiSelectGroup extends React.Component {
 		inputColon: false, // boolean separator between key and value (':')
 		selectedItems: typeof this.props.search === 'string' ?
 			[...new URLSearchParams(this.props.search)].map(([k, v]) => {
-				const item = this.props.data[k] && this.props.data[k].find(o => o.name === v);
-				return [k, v, item ? item.id : undefined];
+				const entry = [...this.props.data[k] || []].find(([id, o]) => v === o.name); // find a value with this name
+				return [k, v, entry ? entry[0] : undefined];
 			}) :
 			[], // ArrayOf([key: String, value: String, id?: String]) // optional id for an existing item in data (todo clean that)
 	};
@@ -155,7 +155,7 @@ class MultiSelectGroup extends React.Component {
 			const { menu: MenuComp } = ITEMS[inputKey];
 			return (
 				<MenuComp
-					data={this.props.data[inputKey] && this.props.data[inputKey].valueSeq()}
+					data={this.props.data[inputKey] && [...this.props.data[inputKey].values()]}
 					value={inputValue}
 					style={{ flex: 1 }}
 					setInputEl={this.setInputEl}

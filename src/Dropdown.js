@@ -1,20 +1,24 @@
 import React from 'react';
-import { Manager, Target, Popper } from 'react-popper';
 import { ClickAwayListener, Paper, Grow, withStyles } from '@material-ui/core';
 
 const styles = {
+	root: {
+		position: 'relative',
+	},
+	open: {
+		'& $paper': {
+			zIndex: 10
+		}
+	},
 	paper: {
+		position: 'absolute',
+		top: '100%',
+		left: 0,
 		'& [role=menu]': {
 			display: 'flex',
 			flexDirection: 'column',
 		},
-	},
-	popper: {
-		zIndex: 2,
-	},
-	popperClose: {
-		pointerEvents: 'none',
-	},
+	}
 };
 
 class Dropdown extends React.PureComponent {
@@ -27,12 +31,22 @@ class Dropdown extends React.PureComponent {
 	// };
 	state = {};
 
+	componentDidMount() {
+		document.addEventListener('keydown', this.close);
+	}
+	componentWillUnmount() {
+		document.removeEventListener('keydown', this.close);
+	}
+
 	isControlled = () => this.props.open !== undefined;
 	isOpen = () => (this.props.open !== undefined ? this.props.open : this.state.open);
 
 	close = e => {
-		if (this.inputEl && this.inputEl.contains(e.target)) {
+		if (e.type === 'keydown' && e.key !== 'Escape' || e.type !== 'keydown' && this.inputEl && this.inputEl.contains(e.target)) {
 			return; // ignore button interactions
+		}
+		if (typeof this.props.onClose === 'function') {
+			return this.props.onClose(e);
 		}
 		this.setState({ open: false });
 	};
@@ -43,9 +57,11 @@ class Dropdown extends React.PureComponent {
 
 	render() {
 		const {
+			className,
 			classes,
 			component: Component = 'div',
-			button = this.props.input,
+			input,
+			button = input,
 			children,
 			open = this.state.open,
 			...props
@@ -63,23 +79,17 @@ class Dropdown extends React.PureComponent {
 			...(!this.isControlled() && { onClick: this.open, onFocus: this.open }),
 		});
 		return (
-			<Component {...props}>
-				<Manager>
-					<Target>{Btn}</Target>
-					<Popper
-						placement="bottom-start"
-						eventsEnabled={open}
-						className={`${classes.popper} ${!open ? classes.popperClose : ''}`}
-					>
-						<ClickAwayListener onClickAway={this.close}>
-							<Grow in={open} style={{ transformOrigin: '0 0 0' }}>
-								<Paper className={classes.paper}>
-									{typeof children === 'function' ? children({ onClose: this.close }) : children}
-								</Paper>
-							</Grow>
-						</ClickAwayListener>
-					</Popper>
-				</Manager>
+			<Component {...props} className={`${className} ${open ? classes.open : ''}`}>
+				<div className={`${classes.root}`}>
+					{Btn}
+					<ClickAwayListener onClickAway={this.close}>
+						<Grow in={open} style={{ transformOrigin: '0 0 0' }}>
+							<Paper className={classes.paper}>
+								{children}
+							</Paper>
+						</Grow>
+					</ClickAwayListener>
+				</div>
 			</Component>
 		);
 	}
